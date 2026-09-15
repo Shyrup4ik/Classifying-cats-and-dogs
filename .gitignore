@@ -1,0 +1,26 @@
+# Python / notebooks
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Datasets and generated files
+train/
+dataset/
+dataset_resnet_*/
+dataset_cnn_*/
+cat_dog_fixed.csv
+cat_dog_pixels_fixed.csv
+*.pt
+*.pth
+
+# Local photos
+*.jpg
+*.jpeg
+*.png
+
+# macOS and editor files
+.DS_Store
+.vscode/
+.idea/
