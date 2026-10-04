@@ -20,6 +20,13 @@ cat_dog_pixels_fixed.csv
 *.jpeg
 *.png
 
+# Checked-in public UI examples
+!frontend/assets/*.jpg
+
+# Local runtime artifacts
+.pytest_cache/
+*.log
+
 # macOS and editor files
 .DS_Store
 .vscode/

@@ -1,0 +1,42 @@
+name: cat-dog-app
+services:
+  backend:
+    build:
+      context: ./backend
+      target: production
+    environment:
+      MODEL_PATH: /models/cat_dog_fixed.pt
+      TORCH_NUM_THREADS: "2"
+    volumes:
+      - ./models:/models:ro
+    restart: unless-stopped
+    init: true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  frontend:
+    build: ./frontend
+    ports:
+      - "127.0.0.1:${APP_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+  tests:
+    profiles: ["test"]
+    build:
+      context: ./backend
+      target: test
+    environment:
+      MODEL_PATH: /models/cat_dog_fixed.pt
+    volumes:
+      - ./models:/models:ro
+      - ./frontend/assets:/samples:ro

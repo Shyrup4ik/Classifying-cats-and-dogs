@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#214c42">
+  <meta name="description" content="Кошка или собака? Загрузите фото и узнайте, что видит нейросеть.">
+  <title>Лапа — кошка или собака?</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/></symbol>
+    <symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="icon-cat" viewBox="0 0 24 24"><path d="M4 10V3l6 4h4l6-4v7c1 2 1 5 0 7-3 5-13 5-16 0-1-2-1-5 0-7Z"/><path d="M8 12h.01M16 12h.01m-6 4 2 1 2-1M3 14l-2-1m2 4-2 1m20-4 2-1m-2 4 2 1"/></symbol>
+    <symbol id="icon-dog" viewBox="0 0 24 24"><path d="M7 7c0-4 10-4 10 0v9c0 7-10 7-10 0V7Zm0 0C1 2 1 8 2 12c1 4 5 1 5 1m10-6c6-5 6 1 5 5-1 4-5 1-5 1"/><path d="M10 11h.01M14 11h.01m-4 5 2 1 2-1m-2 1v2"/></symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v2"/></symbol>
+  </svg>
+  <header class="site-header wrap">
+    <a class="brand" href="/" aria-label="Лапа, главная"><img src="/favicon.svg" width="38" height="38" alt=""><span>лапа<span class="brand-dot">.</span></span></a>
+    <nav aria-label="Основная навигация"><a href="#classifier">Распознать фото</a><a href="#how-it-works">Как это работает</a></nav>
+    <div class="status" id="model-status" role="status"><span class="status-dot"></span><span id="status-text">Подключаем модель</span></div>
+  </header>
+  <main>
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="little-star">✳</span> МАЛЕНЬКИЙ ЭКСПЕРИМЕНТ С ИИ</div>
+        <h1 id="hero-title">Кто здесь<br><span>хороший мальчик?</span></h1>
+        <p class="hero-description">А может, всё-таки кошка? Загрузите фотографию —<br class="desktop-break"> нейросеть поможет разобраться.</p>
+        <a href="#classifier" class="button primary hero-button">Давайте узнаем <svg class="icon"><use href="#icon-arrow"/></svg></a>
+        <div class="hero-note"><span class="tiny-paws">✦</span> Два класса. Одно фото. Немного магии.</div>
+      </div>
+      <div class="pet-collage" aria-label="Примеры: кошка и собака">
+        <div class="collage-circle"></div><span class="collage-spark spark-one">✳</span><span class="collage-spark spark-two">✧</span>
+        <figure class="pet-card cat-card"><img src="/assets/cat.jpg" alt="Чёрно-белая кошка смотрит в камеру" width="800" height="533"><figcaption><span><svg class="icon"><use href="#icon-cat"/></svg> Команда «мяу»</span><span>01</span></figcaption></figure>
+        <figure class="pet-card dog-card"><img src="/assets/dog.jpg" alt="Золотистый ретривер" width="800" height="1000"><figcaption><span><svg class="icon"><use href="#icon-dog"/></svg> Команда «гав»</span><span>02</span></figcaption></figure>
+        <div class="collage-sticker">cat <span>or</span> dog?</div>
+      </div>
+    </section>
+
+    <section class="classifier wrap" id="classifier" aria-labelledby="classifier-title">
+      <div class="section-heading"><div><div class="eyebrow">ПОЗНАКОМИМ МОДЕЛЬ С ВАШИМ ПИТОМЦЕМ</div><h2 id="classifier-title">Одна фотография — и готово.</h2></div><span class="section-number">01 / РАСПОЗНАВАНИЕ</span></div>
+      <div class="workspace">
+        <div class="upload-panel">
+          <div class="panel-heading"><span class="step-number">1</span><h3>Добавьте фотографию</h3><span class="format-tag">JPG · PNG · WebP</span></div>
+          <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" class="visually-hidden" aria-label="Выбрать фото животного">
+          <button class="dropzone" id="dropzone" type="button" aria-describedby="upload-help">
+            <span class="upload-icon"><svg class="icon"><use href="#icon-upload"/></svg></span>
+            <strong>Перетащите фото сюда</strong><span>или <span class="text-link">выберите файл</span> на устройстве</span><small id="upload-help">До 10 МБ · до 20 мегапикселей</small>
+          </button>
+          <div class="preview-box" id="preview-box" hidden><img id="preview" alt="Выбранное фото"><button class="remove-button" id="remove-file" type="button" aria-label="Удалить фото"><svg class="icon"><use href="#icon-close"/></svg></button><div class="file-info"><svg class="icon"><use href="#icon-image"/></svg><span id="file-name"></span><span id="file-size"></span></div></div>
+          <div class="examples"><span>Нет фото под рукой?</span><div class="example-buttons"><button type="button" class="example" data-example="cat"><img src="/assets/cat.jpg" alt="" width="36" height="36">Пример с кошкой <span>↗</span></button><button type="button" class="example" data-example="dog"><img src="/assets/dog.jpg" alt="" width="36" height="36">Пример с собакой <span>↗</span></button></div></div>
+          <button id="predict-button" class="button primary predict-button" type="button" disabled><span id="predict-text">Распознать фото</span><svg class="icon" id="predict-arrow"><use href="#icon-arrow"/></svg><span class="spinner" id="predict-spinner" hidden></span></button>
+          <p class="upload-error" id="upload-error" role="alert" hidden></p>
+          <p class="privacy-note"><svg class="icon"><use href="#icon-lock"/></svg>Фото используется только для анализа и не хранится на сервере.</p>
+        </div>
+
+        <div class="result-panel" aria-live="polite" aria-atomic="true">
+          <div class="panel-heading"><span class="step-number">2</span><h3>Посмотрите результат</h3><span class="result-tag" id="result-tag">Ждём фото</span></div>
+          <div class="empty-result" id="empty-result"><div class="animal-icons"><span><svg class="icon"><use href="#icon-cat"/></svg></span><span><svg class="icon"><use href="#icon-dog"/></svg></span></div><h4>Кошка или собака?</h4><p>Добавьте фото, и здесь появится<br> ответ нейросети с вероятностями.</p><span class="empty-arrow">← Начнём с фотографии</span></div>
+          <div class="loading-result" id="loading-result" hidden><div class="scan-icon"><svg class="icon"><use href="#icon-image"/></svg></div><h4>Приглядываемся…</h4><p>Нейросеть изучает ваше фото.</p><div class="loading-line"></div></div>
+          <div class="prediction-result" id="prediction-result" hidden><div class="result-eyebrow">ПО МНЕНИЮ НЕЙРОСЕТИ, ЭТО</div><div class="result-title-row"><h4 id="result-label"></h4><span class="result-animal"><svg class="icon"><use id="result-icon" href="#icon-cat"/></svg></span></div><div class="confidence-line"><strong id="confidence"></strong><span>вероятность выбранного класса</span></div><div class="probabilities"><div class="probability"><div><span><svg class="icon"><use href="#icon-cat"/></svg>Кошка</span><strong id="cat-value"></strong></div><progress id="cat-progress" max="1" value="0" aria-label="Вероятность кошки"></progress></div><div class="probability"><div><span><svg class="icon"><use href="#icon-dog"/></svg>Собака</span><strong id="dog-value"></strong></div><progress id="dog-progress" max="1" value="0" aria-label="Вероятность собаки"></progress></div></div><div class="result-meta"><span><svg class="icon"><use href="#icon-check"/></svg> Анализ завершён</span><span id="inference-time"></span></div><p class="low-confidence" id="low-confidence" hidden>Вероятности близки — попробуйте более чёткое фото животного.</p><button class="button secondary" id="another-photo" type="button">Попробовать другое фото <svg class="icon"><use href="#icon-arrow"/></svg></button></div>
+          <div class="result-footnote"><span>i</span><p>Модель знает только кошек и собак. Для других объектов она тоже выберет один из этих классов. Вероятности — оценка модели, а не гарантия.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-section wrap" id="how-it-works" aria-labelledby="how-title"><div class="section-heading"><div><div class="eyebrow">ЗА КУЛИСАМИ</div><h2 id="how-title">Всё довольно просто.</h2></div><span class="section-number">02 / КАК ЭТО РАБОТАЕТ</span></div><div class="how-grid"><article><span class="how-number">01</span><h3>Вы загружаете фото</h3><p>Лучше всего подойдёт чёткий снимок одного животного без лишних деталей.</p></article><article><span class="how-number">02</span><h3>Нейросеть ищет знакомое</h3><p>ResNet18, обученная на фотографиях кошек и собак, анализирует изображение.</p></article><article><span class="how-number">03</span><h3>Вы получаете ответ</h3><p>Два процента показывают, к какому из классов модель относит ваше фото.</p></article></div></section>
+  </main>
+  <footer class="site-footer wrap"><a class="brand footer-brand" href="/"><img src="/favicon.svg" width="28" height="28" alt=""><span>лапа.</span></a><span>Любопытство + нейросеть = знакомство с вашим питомцем.</span><a href="https://github.com/Shyrup4ik/Classifying-cats-and-dogs" target="_blank" rel="noopener noreferrer">Исходный проект <span>↗</span></a></footer>
+</body>
+</html>
